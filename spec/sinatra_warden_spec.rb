@@ -6,15 +6,11 @@ describe "Sinatra::Warden" do
     @user = User.create(:email => 'justin.smestad@gmail.com', :password => 'thedude')
   end
 
-  after{ Warden.test_reset! }
-
   def registered_user
-    User.first(:email => 'justin.smestad@gmail.com')
+    @user
   end
 
-  it "should be a valid user" do
-    expect(@user.new?).to be_falsey
-  end
+  after{ Warden.test_reset! }
 
   it "should create successfully" do
     expect(@user.password).to eq("thedude")
@@ -206,5 +202,4 @@ describe "Sinatra::Warden" do
 
     end
   end
-
 end

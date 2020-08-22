@@ -5,15 +5,15 @@ ENV['RACK_ENV'] ||= 'test'
 
 require 'sinatra_warden'
 require 'rspec'
-require 'dm-core'
-require 'dm-migrations'
+# require 'dm-core'
+# require 'dm-migrations'
 
 if ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start
 end
 
-DataMapper.setup(:default, 'sqlite3::memory:')
+# DataMapper.setup(:default, 'sqlite3::memory:')
 
 %w(fixtures support).each do |path|
   Dir[ File.join(File.dirname(__FILE__), path, '/**/*.rb') ].each do |m|
@@ -24,9 +24,9 @@ end
 RSpec.configure do |config|
   config.include(Rack::Test::Methods)
 
-  config.before(:each) do
-    DataMapper.auto_migrate!
-  end
+  # config.before(:each) do
+  #   DataMapper.auto_migrate!
+  # end
 
   # default app
   def app
