@@ -80,8 +80,6 @@ module Sinatra
       # upon successful authentication
       app.set :auth_use_referrer, false
 
-      app.set :auth_error_message,   "Could not log you in."
-      app.set :auth_success_message, "You have logged in successfully."
       app.set :auth_template_renderer, :erb
       app.set :auth_login_template, :login
 
@@ -91,7 +89,6 @@ module Sinatra
       app.post '/unauthenticated/?' do
         status 401
         warden.custom_failure! if warden.config.failure_app == self.class
-        env['x-rack.flash'][:error] = settings.auth_error_message if defined?(Rack::Flash)
         self.send(settings.auth_template_renderer, settings.auth_login_template)
       end
 
@@ -108,7 +105,6 @@ module Sinatra
       app.get '/oauth_callback/?' do
         if settings.auth_use_oauth
           authenticate
-          env['x-rack.flash'][:success] = settings.auth_success_message if defined?(Rack::Flash)
           redirect settings.auth_success_path
         else
           redirect settings.auth_failure_path
@@ -117,14 +113,12 @@ module Sinatra
 
       app.post '/login/?' do
         authenticate
-        env['x-rack.flash'][:success] = settings.auth_success_message if defined?(Rack::Flash)
         redirect settings.auth_use_referrer && session[:return_to] ? session.delete(:return_to) : settings.auth_success_path
       end
 
       app.get '/logout/?' do
         authorize!
         logout
-        env['x-rack.flash'][:success] = settings.auth_success_message if defined?(Rack::Flash)
         redirect settings.auth_success_path
       end
     end

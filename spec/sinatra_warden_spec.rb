@@ -167,20 +167,6 @@ describe "Sinatra::Warden" do
     end
   end
 
-  context "Rack::Flash integration" do
-
-    it "should return a success message" do
-      post '/login', 'email' => 'justin.smestad@gmail.com', 'password' => 'thedude'
-      expect(last_request.env['x-rack.flash'][:success]).to eq("You have logged in successfully.")
-    end
-
-    it "should return an error message" do
-      post '/login', 'email' => 'bad', 'password' => 'wrong'
-      expect(last_request.env['x-rack.flash'][:error]).to eq("Could not log you in.")
-    end
-
-  end
-
   context "OAuth support" do
     context "when enabled" do
       before do
